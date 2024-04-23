@@ -19,7 +19,7 @@ module FfApi
         def schools(params = {})
             connection = Faraday.new(url: base_url)
             if params.is_a?(Hash)
-                response = connection.get("schools.json", mutate_params(params)) do |request|
+                response = connection.get("schools.json", params) do |request|
                     request.headers["Authorization"] = "Bearer #{api_key}"
                 end
                 if response.status == 200
@@ -43,7 +43,7 @@ module FfApi
         def districts(params = {})
             connection = Faraday.new(url: base_url)
             if params.is_a?(Hash)
-                response = connection.get("districts.json", mutate_params(params)) do |request|
+                response = connection.get("districts.json", params) do |request|
                     request.headers["Authorization"] = "Bearer #{api_key}"
                 end
                 if response.status == 200
@@ -68,23 +68,6 @@ module FfApi
             body = JSON.parse(response.body)
             body.merge(status: response.status)
         end
-
-        def mutate_params(params)
-            params.map do |name, value|
-                name = name.to_s
-                if value.is_a?(Array)
-                    name += "_in"
-                else
-                    if name =~ /grade|state|district_nces_id/
-                        name += "_eq"
-                    else
-                        name += "_matches"
-                    end
-                end
-                [name, value]
-            end.to_h
-        end
-
 
     end
 
