@@ -6,6 +6,7 @@ module FfApi
                 nces_name
                 name
                 level
+                address
             ]
         )
         def initialize(school_hash)
