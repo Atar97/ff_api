@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "ff_api"
-  s.version     = "0.1.1"
+  s.version     = "0.2.1"
   s.summary     = "Finalforms API Helper"
   s.description = "An easy to use ruby gem to fetch data from the finalforms database"
   s.authors     = ["Austin Cotant", "Skyler Cummins"]

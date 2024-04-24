@@ -19,12 +19,23 @@ module FfApi
         def schools(params = {})
             connection = Faraday.new(url: base_url)
             if params.is_a?(Hash)
+                json = schools_as_json(params)
+                schools = json["results"]
+                json["results"] = schools.map { |school_hash| FfApi::School.new(school_hash) }
+                json
+            else
+                FfApi::School.new(schools_as_json)
+            end
+        end
+
+        def schools_as_json(params = {})
+            connection = Faraday.new(url: base_url)
+            if params.is_a?(Hash)
                 response = connection.get("schools.json", params) do |request|
                     request.headers["Authorization"] = "Bearer #{api_key}"
                 end
                 if response.status == 200
-                    schools = JSON.parse(response.body)
-                    schools.map { |school_hash| FfApi::School.new(school_hash) }
+                    JSON.parse(response.body)
                 else
                     respond_to_error(response)
                 end
@@ -33,7 +44,7 @@ module FfApi
                     request.headers["Authorization"] = "Bearer #{api_key}"
                 end
                 if response.status == 200
-                    FfApi::School.new(JSON.parse(response.body))
+                    JSON.parse(response.body)
                 else
                     respond_to_error(response)
                 end
@@ -43,12 +54,23 @@ module FfApi
         def districts(params = {})
             connection = Faraday.new(url: base_url)
             if params.is_a?(Hash)
+                json = districts_as_json(params)
+                districts = json["results"]
+                json["results"] = districts.map { |district_hash| FfApi::District.new(district_hash) }
+                json
+            else
+                FfApi::District.new(districts_as_json)
+            end
+        end
+
+        def districts_as_json(params = {})
+            connection = Faraday.new(url: base_url)
+            if params.is_a?(Hash)
                 response = connection.get("districts.json", params) do |request|
                     request.headers["Authorization"] = "Bearer #{api_key}"
                 end
                 if response.status == 200
-                    districts = JSON.parse(response.body)
-                    districts.map { |district_hash| FfApi::District.new(district_hash) }
+                    JSON.parse(response.body)
                 else
                     respond_to_error(response)
                 end
@@ -57,7 +79,7 @@ module FfApi
                     request.headers["Authorization"] = "Bearer #{api_key}"
                 end
                 if response.status == 200
-                    FfApi::District.new(JSON.parse(response.body))
+                    JSON.parse(response.body)
                 else
                     respond_to_error(response)
                 end
